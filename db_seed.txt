@@ -1,0 +1,54 @@
+
+INSERT INTO SENSORS (name, type) VALUES ('LMT84LP', 'temperature');
+INSERT INTO SENSORS (name, type) VALUES ('LM35DZ', 'temperature');
+INSERT INTO SENSORS (name, type) VALUES ('DS18B20', 'temperature')
+INSERT INTO SENSORS (name, type) VALUES ('AT30TSE754A-SS8M-T', 'temperature')
+INSERT INTO SENSORS (name, type) VALUES ('HIH9120-021-001S', 'humidity')
+INSERT INTO SENSORS (name, type) VALUES ('HIH6030-021-001', 'humidity')
+INSERT INTO SENSORS (name, type) VALUES ('HIH-4000-001', 'humidity')
+INSERT INTO SENSORS (name, type) VALUES ('SHT15', 'humidity')
+INSERT INTO SENSORS (name, type) VALUES ('SM-UART-04L', 'air quality')
+INSERT INTO SENSORS (name, type) VALUES ('IR11EM', 'gas')
+
+INSERT INTO LOCATIONS (location) VALUES ('Main Gate')
+INSERT INTO LOCATIONS (location) VALUES ('Left Lower Corner')
+INSERT INTO LOCATIONS (location) VALUES ('Right Lower Corner')
+INSERT INTO LOCATIONS (location) VALUES ('Left Upper Corner')
+INSERT INTO LOCATIONS (location) VALUES ('Right Upper Corner')
+INSERT INTO LOCATIONS (location) VALUES ('Middle')
+
+INSERT INTO SENSORS_LOCATIONS (sensor_id, location_id) VALUES (1, 1)
+INSERT INTO SENSORS_LOCATIONS (sensor_id, location_id) VALUES (1, 2)
+INSERT INTO SENSORS_LOCATIONS (sensor_id, location_id) VALUES (2, 3)
+INSERT INTO SENSORS_LOCATIONS (sensor_id, location_id) VALUES (5, 2)
+INSERT INTO SENSORS_LOCATIONS (sensor_id, location_id) VALUES (9, 4)
+INSERT INTO SENSORS_LOCATIONS (sensor_id, location_id) VALUES (8, 5)
+
+
+
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (1, current_timestamp, 10)
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (2, current_timestamp, 20)
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (2, current_timestamp, 30)
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (4, current_timestamp, 40)
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (5, current_timestamp, 50)
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (6, current_timestamp, 60)
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (1, current_timestamp, 10)
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (2, current_timestamp, 20)
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (3, current_timestamp, 30)
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (4, current_timestamp, 40)
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (5, current_timestamp, 50)
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (6, current_timestamp, 60)
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (1, current_timestamp, 10)
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (2, current_timestamp, 20)
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (3, current_timestamp, 30)
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (4, current_timestamp, 40)
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (5, current_timestamp, 50)
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (6, current_timestamp, 10)
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (1, current_timestamp, 60)
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (2, current_timestamp, 10)
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (3, current_timestamp, 20)
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (4, current_timestamp, 30)
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (5, current_timestamp, 40)
+INSERT INTO LOGGING (s_l_id, timestamp, value) VALUES (6, current_timestamp, 50)
+
+
