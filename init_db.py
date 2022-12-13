@@ -1,4 +1,10 @@
+import sys
 from DBobj import DBobj
+
+def create_db(dbobj, dbname):
+    if not dbobj.create_db(dbname):
+        sys.exit(1)
+    
 
 def create_tables(dbobj):
     ## sensors table
@@ -9,7 +15,9 @@ def create_tables(dbobj):
     )
     """
 
-    dbobj.create_table("sensors", tablestructure)
+    if not dbobj.create_table("sensors", tablestructure):
+        print("Error creating table: sensors")
+        sys.exit(1)
 
     ## locations table
     tablestructure =\
@@ -18,7 +26,9 @@ def create_tables(dbobj):
     )
     """
 
-    dbobj.create_table("locations", tablestructure)
+    if not dbobj.create_table("locations", tablestructure):
+        print("Error creating table: locations")
+        sys.exit(1)
 
     ## deployed sensors and their locations
     tablestructure =\
@@ -29,7 +39,9 @@ def create_tables(dbobj):
     FOREIGN KEY (location_id) REFERENCES locations (location_id)
     )
     """
-    dbobj.create_table("sensors_locations", tablestructure)
+    if not dbobj.create_table("sensors_locations", tablestructure):
+        print("Error creating table: sensors_locations")
+        sys.exit(1)
 
     ## logging sensors data
     tablestructure =\
@@ -40,7 +52,9 @@ def create_tables(dbobj):
     FOREIGN KEY (s_l_id) REFERENCES sensors_locations (s_l_id)
     )"""
 
-    dbobj.create_table("logging", tablestructure)
+    if not dbobj.create_table("logging", tablestructure):
+        print("Error creating table: logging")
+        sys.exit(1)
 
 
 def add_data(dbobj):
@@ -52,8 +66,29 @@ def add_data(dbobj):
             dbobj.execute_sql(statement)
 
 if __name__ == "__main__":
-    dbobj = DBobj("sensors_data")
-    # create_tables(dbobj)
+    
+    username =  "postgres"
+    password = "postgres"
+    
+    if len(sys.argv) == 3:
+        username = sys.argv[1]
+        password = sys.argv[2]
+    
+    elif len(sys.argv) == 2:
+        username = sys.argv[1]
+        password = ""
+    
+    dbobj = DBobj("postgres", user=username, pwd=password)
+    create_db(dbobj, "sensors_data")
+    print("Creating db succeeded")
+    dbobj.closeConnection()
+    
+    #Connect to sensors_data db
+    dbobj = DBobj("sensors_data", user=username, pwd=password)
+    print("In sensors_data db")
+    create_tables(dbobj)
+    print("create table succeeded")
     add_data(dbobj)
+    dbobj.closeConnection()
     
 

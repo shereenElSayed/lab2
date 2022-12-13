@@ -11,6 +11,31 @@ class DBobj(object):
             print('Problem connecting to DB')
             sys.exit(1)
     
+    def change_connection(self, dbname, user="postgres", pwd="postgres", host="localhost") -> None:
+        args = "dbname='{0}' user='{1}' host='{2}' password='{3}'".format(dbname,user,host,pwd)
+        try:
+            self.conn = psycopg2.connect(args)
+        except Exception as e:
+            print(e)
+            print('Problem connecting to DB')
+
+    def create_db(self, dbname):
+        if dbname == "":
+            print("DB name cannot be empty")
+            return False
+        sql = f"CREATE database {dbname}"
+        self.conn.autocommit = True
+
+        curs = self.conn.cursor()
+        try:
+            curs.execute(sql)
+        except Exception as e:
+            print(e)
+            print(f"Unable to create database {dbname}")
+            return False
+        self.conn.autocommit = False
+        return True
+
     def get_cursor(self,svrcursor=None):
         if svrcursor:
             return self.conn.cursor(svrcursor)
