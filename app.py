@@ -86,7 +86,7 @@ def addsensors():
 def main():
     '''The threaded option for concurrent accesses, 0.0.0.0 host says listen to all network interfaces (leaving this off changes this to local (same host) only access, port is the port listened on -- this must be open in your firewall or mapped out if within a Docker container. In Heroku, the heroku runtime sets this value via the PORT environment variable (you are not allowed to hard code it) so set it from this variable and give a default value (8118) for when we execute locally.  Python will tell us if the port is in use.  Start by using a value > 8000 as these are likely to be available.
     '''
-    localport = int(os.getenv("PORT", 8088))
+    localport = int(os.getenv("PORT", 8000))
     app.run(threaded=True, host='0.0.0.0', port=localport)
 
 if __name__ == '__main__':
