@@ -62,11 +62,59 @@ def getsensors():
         response["RESULT"] = []
         for row in result:
             response["RESULT"].append({"sensor name": row[1], "type": row[2]})
-        # response["MESSAGE"] = f"Welcome {msg}!"
         status = 200
 
     # Return the response in json format with status code
     return jsonify(response), status
+
+'''
+get locations should return a json format with all the locations and their IDs
+Return:
+- If there is an error in retrieving the locations, return json with MESSAGE key and value "Error retrieving locations" - code 400
+- If succeeded, return json with RESULT and a list of the returned data - code 200
+'''
+@app.route('/api/getlocations/', methods=['GET'])
+def getlocations():
+    ## TODO
+    pass
+
+'''
+get sensors in location api takes sensor id or location id and returns a list
+Parameters: 
+-sensor_id --> sensor id (optional)
+-location_id-> location id(optional)
+Returns:
+- If none of the sensor or location id were specified, returned all from the sensors
+- If sensor id is specified and no location: return the rows where the sensor id is available
+- If location id is specified and no sensor id: return the rows where the location is available
+- If both are specified, return the row where they are both avaiable 
+- The return format is always JSON:
+--- in case of successful data retrieval, RESULT key with value a list of the retrieved data - code 200
+--- in case of failure in retrieving data, MESSAGE key with value "Error: failed to retrieve data"
+'''
+@app.route('/api/getsensorsinlocations', methods=['GET'])
+def getsensorsinlocations():
+    ## TODO
+    pass
+
+
+'''
+get logs by date takes a start and/or end dates and returns the logs in this period
+Parameters:
+- start --> date only (no time) in this format mm_dd_YYYY (optional)
+- end --> date only (no time) in this format mm_dd_YYYY (optional)
+Return:
+- If start is specified and no end, return all logs from this date till the most recent entry
+- If end is specified and no start, return all logs from the beginning till the end date
+- If both, then return logs in this period
+- If none, return the last 20 log entries
+If data retrie
+
+'''
+@app.route('/api/getlogsbydate', method=["GET"])
+def getlogs():
+    ## TODO
+    pass
 
 '''
 add sensors should have arguments name and type.
@@ -80,7 +128,13 @@ def addsensors():
     ## TODO
     pass
 
-
+'''
+add sensor in location should allow you to specify a location id 
+'''
+@app.route('/api/addsensorinlocation/', methods=['PUT'])
+def addsensorinlocation():
+    ## TODO
+    pass
 
 
 def main():
