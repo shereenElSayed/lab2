@@ -39,9 +39,12 @@ with app.app_context():
 def hello():
     return 'Welcome to CS190B Sensors Hub'
 
+#####################################################
+### Get data from server
+#####################################################
 
 @app.route('/api/getsensors/', methods=['GET'])
-def getsensors():
+def get_sensors():
     # Retrieve the msg from url parameter of GET request 
     # and return MESSAGE response (or error or success)
     type = request.args.get("type", None)
@@ -74,7 +77,7 @@ Return:
 - If succeeded, return json with RESULT and a list of the returned data - code 200
 '''
 @app.route('/api/getlocations/', methods=['GET'])
-def getlocations():
+def get_locations():
     ## TODO
     pass
 
@@ -93,7 +96,7 @@ Returns:
 --- in case of failure in retrieving data, MESSAGE key with value "Error: failed to retrieve data"
 '''
 @app.route('/api/getsensorsinlocations', methods=['GET'])
-def getsensorsinlocations():
+def get_sensors_in_locations():
     ## TODO
     pass
 
@@ -112,9 +115,13 @@ If data retrie
 
 '''
 @app.route('/api/getlogsbydate', method=["GET"])
-def getlogs():
+def get_logs_by_date():
     ## TODO
     pass
+
+#####################################################
+### add data to server
+#####################################################
 
 '''
 add sensors should have arguments name and type.
@@ -124,7 +131,7 @@ Return:
 --If sensor exists, return "Failed: Sensor exists in the database"- code 400
 '''
 @app.route('/api/addsensors/', methods=['PUT'])
-def addsensors():
+def add_sensors():
     ## TODO
     pass
 
@@ -132,13 +139,60 @@ def addsensors():
 add sensor in location should allow you to specify a location id 
 '''
 @app.route('/api/addsensorinlocation/', methods=['PUT'])
-def addsensorinlocation():
+def add_sensor_in_location():
     ## TODO
     pass
 
 
+'''
+add log entry
+Parameters:
+s_l_id --> sensor location id
+value --> value of the sensor reading
+Return:
+-- If a parameter is missing, return json with key "Message" and value 
+    "Parameter is missing, expecting sensor location id (s_l_id) and value" - code 400
+-- If both parameters are available, insertion is successful: return json with key "Message" and value
+    "Transaction succeeded" and code 200. If failed then the message value is "Transaction failed {error}" 
+    and error is any error returned from the transaction. code 400
+'''
+@app.route('/api/addlogentry/', methods=['PUT'])
+def add_log_entry():
+    ## TODO
+    pass
+
+#####################################################
+### Delete data from server
+#####################################################
+'''
+delete a sensor by name 
+Parameters:
+name --> name of the sensor to be deleted (Mandatory)
+Returns:
+-- if name is missing, return JSON with key "Message" and value "Parameter name is missing" - code 400
+-- else, return JSON with key "Message" and value "Transaction succeeded" - code 200
+or "Transaction failed {error}" where error is any error message from the execution. - code 400
+Hint:
+The sensor you are deleting is a foreign key in other tables ...
+All occurences of this sensor in the DB should be deleted 
+'''
+@app.route('/api/deletesensor/', methods=['DELETE'])
+def delete_sensor():
+    ## TODO
+    pass
+
+#####################################################
+### Update data from server
+#####################################################
+@app.route('/api/deletesensorinlocation', methods=['PUT'])
+def delete_sensor_in_location():
+    ## TODO 
+    pass
+
 def main():
-    '''The threaded option for concurrent accesses, 0.0.0.0 host says listen to all network interfaces (leaving this off changes this to local (same host) only access, port is the port listened on -- this must be open in your firewall or mapped out if within a Docker container. In Heroku, the heroku runtime sets this value via the PORT environment variable (you are not allowed to hard code it) so set it from this variable and give a default value (8118) for when we execute locally.  Python will tell us if the port is in use.  Start by using a value > 8000 as these are likely to be available.
+    '''The threaded option for concurrent accesses, 0.0.0.0 host says listen to all network interfaces 
+    (leaving this off changes this to local (same host) only access, port is the port listened on
+    -- this must be open in your firewall or mapped out if within a Docker container. 
     '''
     localport = int(os.getenv("PORT", 8000))
     app.run(threaded=True, host='0.0.0.0', port=localport)

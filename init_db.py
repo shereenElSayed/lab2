@@ -2,7 +2,7 @@ import sys
 from DBobj import DBobj
 
 def create_db(dbobj, dbname):
-    if not dbobj.create_db(dbname):
+    if not dbobj.create_db(dbname)[0]:
         sys.exit(1)
     
 
@@ -15,7 +15,7 @@ def create_tables(dbobj):
     )
     """
 
-    if not dbobj.create_table("sensors", tablestructure):
+    if not dbobj.create_table("sensors", tablestructure)[0]:
         print("Error creating table: sensors")
         sys.exit(1)
 
@@ -26,7 +26,7 @@ def create_tables(dbobj):
     )
     """
 
-    if not dbobj.create_table("locations", tablestructure):
+    if not dbobj.create_table("locations", tablestructure)[0]:
         print("Error creating table: locations")
         sys.exit(1)
 
@@ -39,7 +39,7 @@ def create_tables(dbobj):
     FOREIGN KEY (location_id) REFERENCES locations (location_id)
     )
     """
-    if not dbobj.create_table("sensors_locations", tablestructure):
+    if not dbobj.create_table("sensors_locations", tablestructure)[0]:
         print("Error creating table: sensors_locations")
         sys.exit(1)
 
@@ -47,14 +47,16 @@ def create_tables(dbobj):
     tablestructure =\
     """(log_id serial PRIMARY KEY,
     s_l_id INT NOT NULL,
-    timestamp timestamp NOT NULL,
+    timestamp timestamp NOT NULL DEFAULT NOW(),
     value VARCHAR(50) NOT NULL,
     FOREIGN KEY (s_l_id) REFERENCES sensors_locations (s_l_id)
     )"""
 
-    if not dbobj.create_table("logging", tablestructure):
+    if not dbobj.create_table("logging", tablestructure)[0]:
         print("Error creating table: logging")
         sys.exit(1)
+    
+    
 
 
 def add_data(dbobj):
@@ -63,7 +65,10 @@ def add_data(dbobj):
         for statement in seed_file.readlines():
             if statement.strip() == "":
                 continue
-            dbobj.execute_sql(statement)
+            result = dbobj.execute_sql(statement)
+            if not result[0]:
+                print("Insertion failed")
+                sys.exit(1)
 
 if __name__ == "__main__":
     
@@ -74,9 +79,6 @@ if __name__ == "__main__":
         username = sys.argv[1]
         password = sys.argv[2]
     
-    elif len(sys.argv) == 2:
-        username = sys.argv[1]
-        password = ""
     
     dbobj = DBobj("postgres", user=username, pwd=password)
     create_db(dbobj, "sensors_data")
@@ -89,6 +91,7 @@ if __name__ == "__main__":
     create_tables(dbobj)
     print("create table succeeded")
     add_data(dbobj)
+    print("data inserted successfully")
     dbobj.closeConnection()
+    print("Database connection closed")
     
-

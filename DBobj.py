@@ -18,11 +18,13 @@ class DBobj(object):
         except Exception as e:
             print(e)
             print('Problem connecting to DB')
+            return [False, e]
 
     def create_db(self, dbname):
         if dbname == "":
-            print("DB name cannot be empty")
-            return False
+            error = "DB name cannot be empty"
+            print(error)
+            return [False, error]
         sql = f"CREATE database {dbname}"
         self.conn.autocommit = True
 
@@ -32,9 +34,9 @@ class DBobj(object):
         except Exception as e:
             print(e)
             print(f"Unable to create database {dbname}")
-            return False
+            return [False, e]
         self.conn.autocommit = False
-        return True
+        return [True]
 
     def get_cursor(self,svrcursor=None):
         if svrcursor:
@@ -54,11 +56,11 @@ class DBobj(object):
         except Exception as e:
             print(e)
             print('Error: unable to create table {0}, in exceptional case. Type: \n{1}'.format(tablename,tablestructure))
-            return False
+            return [False, e]
         self.conn.commit()
-        return True
+        return [True]
     
-        #delete a table
+    #delete a table
     def rm_table(self,tablename):
         curs = self.conn.cursor()
         try:
@@ -67,7 +69,7 @@ class DBobj(object):
             pass
         self.conn.commit()
 
-        #invoke an SQL query on the db
+    #invoke an SQL query on the db
     def execute_sql(self,sql):
         cur = self.conn.cursor()
         try:
@@ -76,8 +78,9 @@ class DBobj(object):
         except Exception as e:
             print(e)
             print('execute_sql: SQL problem:\n\t{0}'.format(sql))
-            sys.exit(1)
-        return cur
+            return [False, e]
+            # sys.exit(1)
+        return [True]
 
     #close the DB connection
     def closeConnection(self):
