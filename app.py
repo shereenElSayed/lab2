@@ -42,7 +42,12 @@ def hello():
 #####################################################
 ### Get data from server
 #####################################################
-
+''' Get sensors in our database
+Parameters:
+--type --> values: temperature/air_quality/humidity/gas/all
+Returns:
+List of sensors according to the type in JSON in "RESULT" key or the error msg in "MESSAGE"
+'''
 @app.route('/api/getsensors/', methods=['GET'])
 def get_sensors():
     # Retrieve the msg from url parameter of GET request 
