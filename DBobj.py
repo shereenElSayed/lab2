@@ -80,7 +80,7 @@ class DBobj(object):
             print('execute_sql: SQL problem:\n\t{0}'.format(sql))
             return [False, e]
             # sys.exit(1)
-        return [True]
+        return [True, cur]
 
     #close the DB connection
     def closeConnection(self):

@@ -58,14 +58,19 @@ def get_sensors():
         status = 400
     else: #valid message
         if type == "all":
-            cur = db_obj.execute_sql("SELECT * FROM SENSORS")
+            result = db_obj.execute_sql("SELECT * FROM SENSORS")
         else:
-            cur = db_obj.execute_sql(f"SELECT * FROM SENSORS WHERE type='{type}'")
-        result = cur.fetchall()
-        response["RESULT"] = []
-        for row in result:
-            response["RESULT"].append({"sensor name": row[1], "type": row[2]})
-        status = 200
+            result = db_obj.execute_sql(f"SELECT * FROM SENSORS WHERE type='{type}'")
+        if result[0]:
+            
+            execution_result = result[1].fetchall()
+            response["RESULT"] = []
+            for row in execution_result:
+                response["RESULT"].append({"sensor name": row[1], "type": row[2]})
+            status = 200
+        else:
+            response['MESSAGE'] = f"Error executing sql {result[1]}"
+            status = 400
 
     # Return the response in json format with status code
     return jsonify(response), status
@@ -114,7 +119,7 @@ Return:
 If data retrie
 
 '''
-@app.route('/api/getlogsbydate', method=["GET"])
+@app.route('/api/getlogsbydate', methods=["GET"])
 def get_logs_by_date():
     ## TODO
     pass
