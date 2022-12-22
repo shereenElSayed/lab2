@@ -68,7 +68,7 @@ def get_sensors():
             result = db_obj.execute_sql(f"SELECT * FROM SENSORS WHERE type='{type}'")
         if result[0]:
             
-            execution_result = result[1].fetchall()
+            execution_result = result[1].fetchall() # method that fetches all the remaining tuples from the last executed statement from a table (returns a list of tuples)
             response["RESULT"] = []
             for row in execution_result:
                 response["RESULT"].append({"sensor name": row[1], "type": row[2]})
@@ -84,7 +84,12 @@ def get_sensors():
 get locations should return a json format with all the locations and their IDs
 Return:
 - If there is an error in retrieving the locations, return json with MESSAGE key and value "Error retrieving locations" - code 400
+- If an exception occured in the whole function, return json with MESSAGE key and value f"Exception {e}" where e is the exception message - code 500
 - If succeeded, return json with RESULT and a list of the returned data - code 200
+- Example of the return:
+---- Exception: {"MESSAGE":"Exception tuple index out of range","RESULT":[]}
+---- Success: {"RESULT":[{"location":"Main Gate","location_id":1},{"location":"Left Lower Corner","location_id":2},{"location":"Right Lower Corner","location_id":3},{"location":"Left Upper Corner","location_id":4},{"location":"Right Upper Corner","location_id":5},{"location":"Middle","location_id":6}]}
+Please note location and location_id order is not relevent as these elements are accessed by KEY and not index (check dictionaries in python for more clarification)
 '''
 @app.route('/api/getlocations/', methods=['GET'])
 def get_locations():
@@ -103,6 +108,13 @@ Returns:
 - If both are specified, return the row where they are both avaiable 
 - The return format is always JSON:
 --- in case of successful data retrieval, RESULT key with value a list of the retrieved data - code 200
+Example for api/getsensorsinlocations?location_id=2:
+{
+    "RESULT": [
+        {"location_id": 2, "sensor_id": 1,"sensor_location_id": 2},
+        {"location_id": 2, "sensor_id": 5, "sensor_location_id": 4}
+    ]
+}
 --- in case of failure in retrieving data, MESSAGE key with value "Error: failed to retrieve data"
 '''
 @app.route('/api/getsensorsinlocations', methods=['GET'])
@@ -114,8 +126,8 @@ def get_sensors_in_locations():
 '''
 get logs by date takes a start and/or end dates and returns the logs in this period
 Parameters:
-- start --> date only (no time) in this format mm_dd_YYYY (optional)
-- end --> date only (no time) in this format mm_dd_YYYY (optional)
+- start --> date only (no time) in this format mm-dd-YYYY (optional)
+- end --> date only (no time) in this format mm-dd-YYYY (optional)
 Return:
 - If start is specified and no end, return all logs from this date till the most recent entry
 - If end is specified and no start, return all logs from the beginning till the end date
