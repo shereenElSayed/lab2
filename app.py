@@ -133,7 +133,15 @@ Return:
 - If end is specified and no start, return all logs from the beginning till the end date
 - If both, then return logs in this period
 - If none, return the last 20 log entries
-If data retrie
+Example return for /api/getlogsbydate?end=12-14-2022&start=12-10-2022:
+{
+    "RESULT": [
+        { "log_id": 9,"sensor_location_id": 3,"timestamp": "Tue, 13 Dec 2022 00:08:24 GMT","value": "30"},
+        { "log_id": 10,"sensor_location_id": 4,"timestamp": "Mon, 12 Dec 2022 00:08:24 GMT","value": "40"},
+        { "log_id": 11,"sensor_location_id": 5,"timestamp": "Sun, 11 Dec 2022 00:08:24 GMT","value": "50"},
+        { "log_id": 12,"sensor_location_id": 6,"timestamp": "Sat, 10 Dec 2022 00:08:24 GMT","value": "60"}
+    ]
+}
 
 '''
 @app.route('/api/getlogsbydate', methods=["GET"])
@@ -147,10 +155,16 @@ def get_logs_by_date():
 
 '''
 add sensors should have arguments name and type.
+NOTE: Make sure the http method used is correct
+Parameters:
+sensor_name --> the name of the sensor
+sensor_type --> the type of the sensor
 Return: 
---If no sensor available in the table with same name and type, return message: Sensor added successfully - code 200
---If an argument is missing, return "Argument is missing, please pass name and type for the sesnor as argument" - code 400
---If sensor exists, return "Failed: Sensor exists in the database"- code 400
+--If no sensor available in the table with same name and type, return in JSON MESSAGE key with value "Sensor added successfully" - code 200
+--If an argument is missing, return in JSON MESSAGE key with value "Argument is missing, please pass name and type for the sesnor as argument" - code 400
+--If sensor exists, return in JSON MESSAGE key with value "Failed: Sensor exists in the database"- code 400
+--If failed to check if sensor exists: return in JSON MESSAGE key with value ""Failed to check if sensor exists" - code 400
+--If failed to add sensor, return in JSON MESSAGE key with value f"Failed to add sensor {error}" (error from the execution of the command) - code 400
 '''
 @app.route('/api/addsensors/', methods=['PUT'])
 def add_sensors():
@@ -159,6 +173,7 @@ def add_sensors():
 
 '''
 add sensor in location should allow you to specify a location id 
+NOTE: Make sure the http method used is correct
 '''
 @app.route('/api/addsensorinlocation/', methods=['PUT'])
 def add_sensor_in_location():
@@ -168,6 +183,7 @@ def add_sensor_in_location():
 
 '''
 add log entry
+NOTE: Make sure the http method used is correct
 Parameters:
 s_l_id --> sensor location id
 value --> value of the sensor reading
