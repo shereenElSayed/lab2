@@ -44,7 +44,7 @@ def hello():
 #####################################################
 ''' Get sensors in our database
 Parameters:
---type --> values: temperature/air_quality/humidity/gas/all
+--type (string)--> allowed values: temperature/air_quality/humidity/gas/all 
 Returns:
 List of sensors according to the type in JSON in "RESULT" key or the error msg in "MESSAGE"
 '''
@@ -99,8 +99,8 @@ def get_locations():
 '''
 get sensors in location api takes sensor id or location id and returns a list
 Parameters: 
--sensor_id --> sensor id (optional)
--location_id-> location id(optional)
+-sensor_id (int)--> sensor id (optional)
+-location_id (int) --> location id(optional)
 Returns:
 - If none of the sensor or location id were specified, returned all from the sensors
 - If sensor id is specified and no location: return the rows where the sensor id is available
@@ -126,8 +126,8 @@ def get_sensors_in_locations():
 '''
 get logs by date takes a start and/or end dates and returns the logs in this period
 Parameters:
-- start --> date only (no time) in this format mm-dd-YYYY (optional)
-- end --> date only (no time) in this format mm-dd-YYYY (optional)
+- start (string) --> date only (no time) in this format mm-dd-YYYY (optional)
+- end (string) --> date only (no time) in this format mm-dd-YYYY (optional)
 Return:
 - If start is specified and no end, return all logs from this date till the most recent entry
 - If end is specified and no start, return all logs from the beginning till the end date
@@ -157,10 +157,10 @@ def get_logs_by_date():
 add sensors should have arguments name and type.
 NOTE: Make sure the http method used is correct
 Parameters:
-sensor_name --> the name of the sensor
-sensor_type --> the type of the sensor
+sensor_name (string) --> the name of the sensor
+sensor_type (string) --> the type of the sensor
 Return: 
---If no sensor available in the table with same name and type, return in JSON MESSAGE key with value "Sensor added successfully" - code 200
+--If no sensor available in the table with same name and type, return in JSON MESSAGE key with value "Sensor added successfully" - code 201
 --If an argument is missing, return in JSON MESSAGE key with value "Argument is missing, please pass name and type for the sesnor as argument" - code 400
 --If sensor exists, return in JSON MESSAGE key with value "Failed: Sensor exists in the database"- code 400
 --If failed to check if sensor exists: return in JSON MESSAGE key with value ""Failed to check if sensor exists" - code 400
@@ -172,8 +172,14 @@ def add_sensors():
     pass
 
 '''
-add sensor in location should allow you to specify a location id 
+add sensor in location should allow you to specify a sensor and location ids
 NOTE: Make sure the http method used is correct
+Parameters:
+--sensor_id (int) --> Sensor ID (mandatory)
+--location_id (int) --> Location ID (mandatory)
+Returns:
+-- If sensor and location row already exists: retrun in JSON format MESSAGE key with value: "Failed: Sensor in this location exists in the database"- code 400
+-- else, return 
 '''
 @app.route('/api/addsensorinlocation/', methods=['PUT'])
 def add_sensor_in_location():
@@ -185,8 +191,9 @@ def add_sensor_in_location():
 add log entry
 NOTE: Make sure the http method used is correct
 Parameters:
-s_l_id --> sensor location id
-value --> value of the sensor reading
+s_l_id (int) --> sensor location id
+value (int) --> value of the sensor reading
+timestamp (string) --> date and time of the reading (mm-dd-yyyyThh:mm:ss) i.e 12-22-2022T10:15:20
 Return:
 -- If a parameter is missing, return json with key "Message" and value 
     "Parameter is missing, expecting sensor location id (s_l_id) and value" - code 400
@@ -212,7 +219,7 @@ Returns:
 or "Transaction failed {error}" where error is any error message from the execution. - code 400
 Hint:
 The sensor you are deleting is a foreign key in other tables ...
-All occurences of this sensor in the DB should be deleted 
+# TODO: Should we do this? All occurences of this sensor in the DB should be deleted 
 '''
 @app.route('/api/deletesensor/', methods=['DELETE'])
 def delete_sensor():
@@ -222,8 +229,18 @@ def delete_sensor():
 #####################################################
 ### Update data from server
 #####################################################
-@app.route('/api/deletesensorinlocation', methods=['PUT'])
-def delete_sensor_in_location():
+"""
+WORK IN PROGRESS
+Move sensor from location to another
+Parameters:
+--sensor_id : sensor to be moved id
+--current_location: the current location of the sensor
+--new_location: the new location to be used for the sensor
+Returns:
+
+"""
+@app.route('/api/movesensorinlocation', methods=['PUT'])
+def move_sensor_in_location():
     ## TODO 
     pass
 
