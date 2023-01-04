@@ -47,40 +47,48 @@ def hello():
 ### Get data from server
 #####################################################
 ''' Get sensors in our database
-Parameters:
---type (string)--> allowed values: temperature/air_quality/humidity/gas/all 
-Returns:
-List of sensors according to the type in JSON in "RESULT" key or the error msg in "MESSAGE"
+--Parameters:
+----type (string)--> allowed values: temperature/air_quality/humidity/gas/all 
+--Returns:
+----List of sensors according to the type in JSON in "RESULT" key or the error msg in "MESSAGE"
+--Exception: return json with key "Message" and value f"Exception {e}" where e is the exception error. Code 500
+
 '''
 @app.route('/api/getsensors/', methods=['GET'])
 def get_sensors():
     # Retrieve the msg from url parameter of GET request 
     # and return MESSAGE response (or error or success)
-    type = request.args.get("type", None)
+    try:
+        type = request.args.get("type", None)
 
-    if DEBUG:
-        print("GET respond() msg: {}".format(type))
+        if DEBUG:
+            print("GET respond() msg: {}".format(type))
 
-    response = {}
-    if not type: #invalid/missing message
-        response["MESSAGE"] = "no sesnor type is found, please send a type (temperature/air_quality/humidity/gas/all)."
-        status = 400
-    else: #valid message
-        if type == "all":
-            result = db_obj.execute_sql("SELECT * FROM SENSORS")
-        else:
-            result = db_obj.execute_sql(f"SELECT * FROM SENSORS WHERE type='{type}'")
-        if result[0]:
-            
-            execution_result = result[1].fetchall() # method that fetches all the remaining tuples from the last executed statement from a table (returns a list of tuples)
-            response["RESULT"] = []
-            for row in execution_result:
-                response["RESULT"].append({"sensor name": row[1], "type": row[2]})
-            status = 200
-        else:
-            response['MESSAGE'] = f"Error executing sql {result[1]}"
+        response = {}
+        if not type: #invalid/missing message
+            response["MESSAGE"] = "no sesnor type is found, please send a type (temperature/air_quality/humidity/gas/all)."
             status = 400
-
+        else: #valid message
+            if type == "all":
+                result = db_obj.execute_sql("SELECT * FROM SENSORS")
+            else:
+                result = db_obj.execute_sql(f"SELECT * FROM SENSORS WHERE type='{type}'")
+            if result[0]:
+                
+                execution_result = result[1].fetchall() # method that fetches all the remaining tuples from the last executed statement from a table (returns a list of tuples)
+                response["RESULT"] = []
+                for row in execution_result:
+                    response["RESULT"].append({"sensor name": row[1], "type": row[2]})
+                status = 200
+            else:
+                response['MESSAGE'] = f"Error executing sql {result[1]}"
+                status = 400
+    except Exception as e:
+        print(e)
+        print(result)
+        print(execution_result)
+        response["MESSAGE"] = f"Exception {e}"
+        status = 500
     # Return the response in json format with status code
     return jsonify(response), status
 
@@ -110,6 +118,7 @@ Returns:
 - If sensor id is specified and no location: return the rows where the sensor id is available
 - If location id is specified and no sensor id: return the rows where the location is available
 - If both are specified, return the row where they are both avaiable 
+--Exception: return json with key "Message" and value f"Exception {e}" where e is the exception error. Code 500
 - The return format is always JSON:
 --- in case of successful data retrieval, RESULT key with value a list of the retrieved data - code 200
 Example for api/getsensorsinlocations?location_id=2:
@@ -137,6 +146,8 @@ Return:
 - If end is specified and no start, return all logs from the beginning till the end date
 - If both, then return logs in this period
 - If none, return the last 20 log entries
+- Exception: return json with key "Message" and value f"Exception {e}" where e is the exception error. Code 500
+
 Example return for /api/getlogsbydate?end=12-14-2022&start=12-10-2022:
 {
     "RESULT": [
@@ -169,6 +180,8 @@ Return:
 --If sensor exists, return in JSON MESSAGE key with value "Failed: Sensor exists in the database"- code 400
 --If failed to check if sensor exists: return in JSON MESSAGE key with value ""Failed to check if sensor exists" - code 400
 --If failed to add sensor, return in JSON MESSAGE key with value f"Failed to add sensor {error}" (error from the execution of the command) - code 400
+--Exception: return json with key "Message" and value f"Exception {e}" where e is the exception error. Code 500
+
 '''
 @app.route('/api/addsensors/', methods=['PUT'])
 def add_sensors():
@@ -183,7 +196,9 @@ Parameters:
 --location_id (int) --> Location ID (mandatory)
 Returns:
 -- If sensor and location row already exists: retrun in JSON format MESSAGE key with value: "Failed: Sensor in this location exists in the database"- code 400
--- else, return 
+-- else, return
+-- Exception: return json with key "Message" and value f"Exception {e}" where e is the exception error. Code 500
+ 
 '''
 @app.route('/api/addsensorinlocation/', methods=['PUT'])
 def add_sensor_in_location():
@@ -201,9 +216,10 @@ timestamp (string) --> date and time of the reading (mm-dd-yyyyThh:mm:ss) i.e 12
 Return:
 -- If a parameter is missing, return json with key "Message" and value 
     "Parameter is missing, expecting sensor location id (s_l_id) and value" - code 400
--- If both parameters are available, insertion is successful: return json with key "Message" and value
-    "Transaction succeeded" and code 200. If failed then the message value is "Transaction failed {error}" 
+-- If all parameters are available, insertion is successful: return json with key "Message" and value
+    "Log entry added successfully" and code 200. If failed then the message value is "Failed to add log entry {error}" 
     and error is any error returned from the transaction. code 400
+-- Exception: return json with key "Message" and value f"Exception {e}" where e is the exception error. Code 500
 '''
 @app.route('/api/addlogentry/', methods=['PUT'])
 def add_log_entry():
@@ -211,25 +227,55 @@ def add_log_entry():
     pass
 
 #####################################################
-### Delete data from server
+### Delete data from server - TO BE USED IN THE TESTING
 #####################################################
 '''
 delete a sensor by name 
 Parameters:
-name --> name of the sensor to be deleted (Mandatory)
+sensor --> name of the sensor to be deleted (Mandatory)
 Returns:
--- if name is missing, return JSON with key "Message" and value "Parameter name is missing" - code 400
--- else, return JSON with key "Message" and value "Transaction succeeded" - code 200
-or "Transaction failed {error}" where error is any error message from the execution. - code 400
-Hint:
-The sensor you are deleting is a foreign key in other tables ...
-# TODO: Should we do this? All occurences of this sensor in the DB should be deleted 
+-- if sensor name is missing, return JSON with key "Message" and value "Parameter sensor is missing" - code 400
+-- else, return JSON with key "Message" and value "Sensor deleted successfully" - code 200
+or "Failed to delete sensor {error}" where error is any error message from the execution. - code 400
+-- Exception: return json with key "Message" and value f"Exception {e}" where e is the exception error. Code 500
 '''
 @app.route('/api/deletesensor/', methods=['DELETE'])
 def delete_sensor():
     ## TODO
     pass
 
+
+'''
+Delete sensor in location
+Parameters:
+-- s_id --> The id of the sensor
+-- l_id --> The id of the location 
+Return:
+-- If sensor id or location id is missing, return JSON with key "Message" and value "Parameters sensor id (s_id) and/or location id (l_id) are missing" - code 400
+-- else if successful, return JSON with key "Message" and value "Sensor in location is deleted successfully" - code 200
+or "Failed to delete sensor in location {error}" where error is any error message from the execution. - code 400
+-- Exception: return json with key "Message" and value f"Exception {e}" where e is the exception error. Code 500
+'''
+@app.route('/api/deletesensor/', methods=['DELETE'])
+def delete_sensor_in_location():
+    ## TODO
+    pass
+
+'''
+Delete a log entry
+Parameters:
+-- s_l_id (int) --> Sensor location ID (Mandatory)
+-- timestamp (string) --> date and time of the reading (mm-dd-yyyyThh:mm:ss) i.e 12-22-2022T10:15:20 (Mandatory)
+Return:
+-- If any of the parameters is missing, return JSON with key "Message" and value "Parameters sensor location id (s_l_id) and/or timestamp id (timestamp) are missing" - code 400
+-- else if successful, return JSON with key "Message" and value "Log entry is deleted successfully" - code 200
+or "Failed to delete log entry {error}" where error is any error message from the execution. - code 400
+-- Exception: return json with key "Message" and value f"Exception {e}" where e is the exception error. Code 500
+'''
+@app.route('/api/deletesensor/', methods=['DELETE'])
+def delete_log_entry():
+    ## TODO
+    pass
 #####################################################
 ### Update data from server
 #####################################################
