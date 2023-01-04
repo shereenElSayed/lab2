@@ -1,5 +1,7 @@
+import os
 import sys
 from DBobj import DBobj
+import dotenv
 
 def create_db(dbobj, dbname):
     if not dbobj.create_db(dbname)[0]:
@@ -71,13 +73,15 @@ def add_data(dbobj):
                 sys.exit(1)
 
 if __name__ == "__main__":
-    
-    username =  "postgres"
-    password = "postgres"
+
     
     if len(sys.argv) == 3:
         username = sys.argv[1]
         password = sys.argv[2]
+    else:
+        dotenv.load_dotenv()
+        username = os.environ.get("PGUSER")
+        password = os.environ.get("PGPASSWORD")
     
     
     dbobj = DBobj("postgres", user=username, pwd=password)

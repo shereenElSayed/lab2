@@ -1,6 +1,7 @@
 import os
 from DBobj import DBobj
 from flask import Flask, request, jsonify, make_response
+import dotenv
 
 
 app = Flask(__name__)
@@ -33,7 +34,10 @@ def after_request_func(response):
 #initialize db object
 db_obj = None
 with app.app_context():
-    db_obj = DBobj("sensors_data")
+    dotenv.load_dotenv()
+    user = os.environ.get("PGUSER")
+    pwd = os.environ.get("PGPASSWORD")
+    db_obj = DBobj("sensors_data", user, pwd)
 
 @app.route('/')
 def hello():
@@ -249,8 +253,8 @@ def main():
     (leaving this off changes this to local (same host) only access, port is the port listened on
     -- this must be open in your firewall or mapped out if within a Docker container. 
     '''
-    localport = int(os.getenv("PORT", 8000))
-    app.run(threaded=True, host='0.0.0.0', port=localport)
+    
+    app.run(threaded=True)
 
 if __name__ == '__main__':
     main()

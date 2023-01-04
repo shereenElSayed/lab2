@@ -1,8 +1,11 @@
 import psycopg2, sys, argparse
+import os
+
 
 class DBobj(object):
     
-    def __init__(self, dbname, user="postgres", pwd="postgres", host="localhost") -> None:
+    def __init__(self, dbname, user, pwd, host="localhost") -> None:
+        
         args = "dbname='{0}' user='{1}' host='{2}' password='{3}'".format(dbname,user,host,pwd)
         try:
             self.conn = psycopg2.connect(args)
@@ -11,7 +14,7 @@ class DBobj(object):
             print('Problem connecting to DB')
             sys.exit(1)
     
-    def change_connection(self, dbname, user="postgres", pwd="postgres", host="localhost") -> None:
+    def change_connection(self, dbname, user, pwd, host="localhost") -> None:
         args = "dbname='{0}' user='{1}' host='{2}' password='{3}'".format(dbname,user,host,pwd)
         try:
             self.conn = psycopg2.connect(args)
