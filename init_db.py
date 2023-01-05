@@ -13,7 +13,8 @@ def create_tables(dbobj):
     tablestructure = \
     """(sensor_id serial PRIMARY KEY,
     name VARCHAR (50) NOT NULL,
-    type VARCHAR (50) NOT NULL 
+    type VARCHAR (50) NOT NULL ,
+    UNIQUE (name, type)
     )
     """
 
@@ -38,7 +39,8 @@ def create_tables(dbobj):
     sensor_id INT NOT NULL,
     location_id INT NOT NULL,
     FOREIGN KEY (sensor_id) REFERENCES sensors (sensor_id),
-    FOREIGN KEY (location_id) REFERENCES locations (location_id)
+    FOREIGN KEY (location_id) REFERENCES locations (location_id),
+    UNIQUE (sensor_id, location_id)
     )
     """
     if not dbobj.create_table("sensors_locations", tablestructure)[0]:
