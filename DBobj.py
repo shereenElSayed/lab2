@@ -78,12 +78,16 @@ class DBobj(object):
         try:
             cur.execute(sql)
             self.conn.commit()
+            if cur.rowcount > 0:
+                return [True]
+            else:
+                return [False, f"Number of affected rows: {cur.rowcount} rows"]
         except Exception as e:
             print(e)
             print('execute_sql: SQL problem:\n\t{0}'.format(sql))
             return [False, e]
             # sys.exit(1)
-        return [True, cur]
+        
 
     #close the DB connection
     def closeConnection(self):

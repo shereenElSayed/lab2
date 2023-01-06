@@ -193,7 +193,7 @@ Return:
 -- If succeeded, return in JSON "MESSAGE" key with value "Succeeded: Sensor added successfully" - code 200
 -- Exception: return json with key "MESSAGE" and value f"Exception {e}" where e is the exception error. Code 500
 '''
-@app.route('/api/addsensors/', methods=['PUT'])
+@app.route('/api/addsensor/', methods=['PUT'])
 def add_sensor():
     ## TODO
     pass
@@ -269,7 +269,7 @@ Return:
 -- If failed: return JSON object with key "MESSAGE" and value "Failed to delete sensor in location {error}" where error is any error message from the execution. - code 400
 -- Exception: return JSON object with key "MESSAGE" and value f"Exception {e}" where e is the exception error. Code 500
 '''
-@app.route('/api/deletesensor/', methods=['DELETE'])
+@app.route('/api/deletesensorinlocation/', methods=['DELETE'])
 def delete_sensor_in_location():
     ## TODO
     pass
@@ -299,9 +299,9 @@ Parameters:
 --s_l_id : sensor_location id to be updated
 --new_location: the new location to be used for the sensor
 Returns:
--- If any of the parameters is missing, return JSON object with key "MESSAGE" and value "Parameters sensor location id (s_l_id) and/or new location id  are missing" - code 400
+-- If any of the parameters is missing, return JSON object with key "MESSAGE" and value "Failed: sensor location id (s_l_id) and/or new location id parameters are missing" - code 400
 -- If the IDs are not a valid integer, return JSON object with key "MESSAGE" and value "Error: IDs are not a valid integer" - code 400
--- If the change is done successfully,  return JSON object with key "MESSAGE" and value "Sensor moved successfully in location" - code 200
+-- If the change is done successfully,  return JSON object with key "MESSAGE" and value "Succeeded: Sensor moved successfully in location" - code 200
 or "Failed to move sensor {error}" where error is any error message from the execution. - code 400
 -- Exception: return JSON object with key "MESSAGE" and value f"Exception {e}" where e is the exception error. Code 500
 """
