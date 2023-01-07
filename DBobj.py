@@ -79,7 +79,7 @@ class DBobj(object):
             cur.execute(sql)
             self.conn.commit()
             if cur.rowcount > 0:
-                return [True]
+                return [True, cur]
             else:
                 return [False, f"Number of affected rows: {cur.rowcount} rows"]
         except Exception as e:
