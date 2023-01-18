@@ -1,4 +1,10 @@
-
+CREATE TABLE (sensor_id serial PRIMARY KEY,
+    name VARCHAR (50) NOT NULL,
+    type VARCHAR (50) NOT NULL ,
+    UNIQUE (name, type)
+ (location_id serial PRIMARY KEY,
+    location VARCHAR (50)
+    )
 INSERT INTO SENSORS (name, type) VALUES ('LMT84LP', 'temperature');
 INSERT INTO SENSORS (name, type) VALUES ('LM35DZ', 'temperature');
 INSERT INTO SENSORS (name, type) VALUES ('DS18B20', 'temperature')
