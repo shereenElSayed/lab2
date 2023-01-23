@@ -158,7 +158,7 @@ def get_sensors_in_locations():
     - The return format is always JSON:
     --- in case of successful data retrieval, RESULT key with value a list of the retrieved data - code 200
     Example for api/getsensorsinlocations?location_id=2:
-    {
+    {   "MESSAGE": "Succeeded: data retrieved successfully",
         "RESULT": [
             {"location_id": 2, "sensor_id": 1,"sensor_location_id": 2},
             {"location_id": 2, "sensor_id": 5, "sensor_location_id": 4}
