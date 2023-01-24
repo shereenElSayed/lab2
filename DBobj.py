@@ -80,6 +80,8 @@ class DBobj(object):
         try:
             cur.execute(sql)
             self.conn.commit()
+            if sql.lower().startswith("create"):
+                return True, None
             if cur.rowcount > 0:
                 return True, cur
             else:

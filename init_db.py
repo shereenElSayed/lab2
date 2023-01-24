@@ -63,7 +63,7 @@ def create_tables(dbobj):
         sys.exit(1)
 
 
-def add_data(dbobj):
+def execute_seed(dbobj):
     # READ insertion statements from file
     with open("db_seed.txt", "r") as seed_file:
         for statement in seed_file.readlines():
@@ -71,11 +71,11 @@ def add_data(dbobj):
                 continue
             result = dbobj.execute_sql(statement)
             if not result[0]:
-                print("Insertion failed")
+                print(result[1])
                 sys.exit(1)
 
 
-# TODO: (to TA!!!!) add function to check if tabkes exist on the start of app
+# to TA to do late: add function to check if tabkes exist on the start of app
 
 if __name__ == "__main__":
 
@@ -95,9 +95,6 @@ if __name__ == "__main__":
     # Connect to sensors_data db
     dbobj = DBobj("sensors_data", user=username, pwd=password)
     print("In sensors_data db")
-    create_tables(dbobj)
-    print("create table succeeded")
-    add_data(dbobj)
-    print("data inserted successfully")
-    dbobj.close_connection()
-    print("Database connection closed")
+    execute_seed(dbobj)
+    # dbobj.close_connection()
+    # print("Database connection closed")
