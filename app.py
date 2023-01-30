@@ -185,7 +185,8 @@ def get_logs_by_date():
     Each object has log_id, sensor_location id, timestamp and value keys
     -- If start is specified and no end, return all logs from this date till the most recent entry
     -- If end is specified and no start, return all logs from the beginning till the end date
-    -- If both, then return logs in this period
+    -- If both, then return logs in this period (the logs on the start and end dates should be included HINT: your condition
+    should be <= and >=)
     -- If none, return the last 20 log entries
     -- Exception: return JSON object with key "MESSAGE" and value f"Exception {e}" where e is the exception error.
             Code 500
