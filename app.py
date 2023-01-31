@@ -289,9 +289,10 @@ def delete_sensor():
     delete a sensor by name 
     Parameters:
     sensor --> name of the sensor to be deleted (Mandatory)
+    type --> type of the sensor to be deleted (Mandatory)
     Returns:
     -- if sensor parameter is missing, return JSON object with key "MESSAGE" and value
-        "Failed: sensor parameter is missing" - code 400
+        "Failed: sensor and/or type parameter is missing" - code 400
     -- If successful: return JSON object with key "MESSAGE" and value
         "Succeeded: Sensor deleted successfully" - code 200
     -- If failure: return JSON object with key "MESSAGE" and value
