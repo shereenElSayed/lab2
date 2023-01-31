@@ -359,8 +359,8 @@ def move_sensor_in_location():
     """
     Move sensor from location to another
     Parameters:
-    --s_l_id : sensor_location id to be updated
-    --new_location: the new location to be used for the sensor
+    --s_l_id : sensor_location id to be updated (Mandatory)
+    --new_location: the new location to be used for the sensor (Mandatory)
     Returns:
     -- If any of the parameters is missing, return JSON object with key "MESSAGE" and value "Failed: sensor location id
      (s_l_id) and/or new location id parameters are missing" - code 400
