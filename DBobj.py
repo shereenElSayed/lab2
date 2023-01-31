@@ -91,7 +91,9 @@ class DBobj(object):
         except Exception as e:
             print(e)
             print('execute_sql: SQL problem:\n\t{0}'.format(sql))
+            self.conn.rollback()
             return False, e
+        
             # sys.exit(1)
 
     # close the DB connection
