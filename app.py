@@ -187,7 +187,7 @@ def get_logs_by_date():
     -- If end is specified and no start, return all logs from the beginning till the end date
     -- If both, then return logs in this period (the logs on the start and end dates should be included HINT: your condition
     should be <= and >=)
-    -- If none, return the last 20 log entries
+    -- If none, return the last 20 log entries - order by log_id descending order
     -- Exception: return JSON object with key "MESSAGE" and value f"Exception {e}" where e is the exception error.
             Code 500
 

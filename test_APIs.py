@@ -44,7 +44,7 @@ class APIsTest(unittest.TestCase):
         """
         Assert that the response status code and message/result are correct
         Cases to be covered by the test:
-            Case 1: No start and end dates - count should be 25
+            Case 1: No start and end dates - count should be 20
             Case 2: Invalid start date
             Case 3: End date only
         """
