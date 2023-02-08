@@ -93,5 +93,5 @@ class APIsTest(unittest.TestCase):
         raise NotImplementedError("Implement the code and delete this line when you are done")
 
     def tearDown(self):
+        pass
         # Delete any work done in the database
-        raise NotImplementedError("Implement the code and delete this line when you are done")
