@@ -95,4 +95,4 @@ class APIsTest(unittest.TestCase):
     @classmethod
     def tearDown(cls):
         pass
-        # Delete any work done in the database
+        # Delete any work done in the database through the delete API 
