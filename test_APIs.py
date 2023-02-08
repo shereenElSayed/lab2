@@ -22,7 +22,7 @@ class APIsTest(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Check the content of the response
-        self.assertIn({'id': 1, "sensor name": "LMT84LP", "type": "temperature"}, json_response["RESULT"])
+        self.assertIn({'id': 1, 'sensor name': 'LMT84LP', 'type': 'temperature'}, json_response["RESULT"])
 
     def test_get_all_locations(self):
         """
